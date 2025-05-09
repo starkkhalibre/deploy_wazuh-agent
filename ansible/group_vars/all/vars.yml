@@ -6,8 +6,6 @@ wazuh_custom_packages_installation_agent_enabled: false
 wazuh_custom_packages_installation_agent_deb_url: ""
 
 
-
-
 # We recommend the use of ansible-vault to protect Wazuh, api, agentless and authd credentials.
 api_pass: 'eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3YXp1aCIsImF1ZCI6IldhenVoIEFQSSBSRVNUIiwibmJmIjoxNzQ2NzYwODg4LCJleHAiOjE3NDY3NjE3ODgsInN1YiI6IndhenVoLXd1aSIsInJ1bl9hcyI6ZmFsc2UsInJiYWNfcm9sZXMiOlsxXSwicmJhY19tb2RlIjoid2hpdGUifQ.AbJIhZ5m1wkGda1qhxZYZGLBJhz8bXB60nVD1FgSBqsZaJjcDgOt_jNcYiJByX6T2a4pHawaGyUGiMlYqpcc7SWWAOdrIM3bkWq7J0Kr3_G2x-fv9UI1PFx4KPTBCgWb3R2NP9DgrgVOK6GkFJcGDL9U_JExnXuCs089i9qDMjP98KHY'
 authd_pass: 'password'
@@ -21,7 +19,6 @@ wazuh_time_reconnect: '60'
 wazuh_crypto_method: 'aes'
 
 wazuh_dir: "/var/ossec"
-
 
 wazuh_agent_nolog_sensible: yes
 wazuh_agent_config_overlay: yes

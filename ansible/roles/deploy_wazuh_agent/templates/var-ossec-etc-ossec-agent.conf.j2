@@ -142,6 +142,13 @@
     <processes>{{ wazuh_agent_config.syscollector.processes }}</processes>
   </wodle>
 
+  <sca>
+    <enabled>yes</enabled>
+    <scan_on_start>yes</scan_on_start>
+    <interval>12h</interval>
+    <skip_nfs>yes</skip_nfs>
+  </sca>
+
   <syscheck>
     <disabled>no</disabled>
     <frequency>{{ wazuh_agent_config.syscheck.frequency }}</frequency>
