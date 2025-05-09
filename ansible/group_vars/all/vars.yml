@@ -1,0 +1,228 @@
+---
+wazuh_agent_version: 4.12.0
+
+# Custom packages installation
+wazuh_custom_packages_installation_agent_enabled: false
+wazuh_custom_packages_installation_agent_deb_url: ""
+
+
+
+
+# We recommend the use of ansible-vault to protect Wazuh, api, agentless and authd credentials.
+api_pass: 'eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3YXp1aCIsImF1ZCI6IldhenVoIEFQSSBSRVNUIiwibmJmIjoxNzQ2NzYwODg4LCJleHAiOjE3NDY3NjE3ODgsInN1YiI6IndhenVoLXd1aSIsInJ1bl9hcyI6ZmFsc2UsInJiYWNfcm9sZXMiOlsxXSwicmJhY19tb2RlIjoid2hpdGUifQ.AbJIhZ5m1wkGda1qhxZYZGLBJhz8bXB60nVD1FgSBqsZaJjcDgOt_jNcYiJByX6T2a4pHawaGyUGiMlYqpcc7SWWAOdrIM3bkWq7J0Kr3_G2x-fv9UI1PFx4KPTBCgWb3R2NP9DgrgVOK6GkFJcGDL9U_JExnXuCs089i9qDMjP98KHY'
+authd_pass: 'password'
+
+wazuh_api_reachable_from_agent: yes
+wazuh_profile_ubuntu: 'ubuntu, ubuntu18, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu24.04'
+
+wazuh_auto_restart: 'yes'
+wazuh_notify_time: '10'
+wazuh_time_reconnect: '60'
+wazuh_crypto_method: 'aes'
+
+wazuh_dir: "/var/ossec"
+
+
+wazuh_agent_nolog_sensible: yes
+wazuh_agent_config_overlay: yes
+
+# List of managers. The first one with register variable declared *and* set to true
+# is the one used to register the agent. Otherwise, the first one in the list will be used.
+wazuh_managers:
+  - address: 127.0.0.1
+    port: 1514
+    protocol: tcp
+    api_port: 55000
+    api_proto: https
+    api_user: wazuh-wui
+    max_retries: 5
+    retry_interval: 5
+    register: yes
+
+## Authentication Method: Enrollment section (5.x)
+wazuh_agent_enrollment:
+  enabled: 'yes'
+  manager_address: '' 
+  port: 1515
+  agent_name: "{{ ansible_hostname }}-{{ ansible_date_time.epoch }}"  
+  groups: default
+  agent_address: ''
+  ssl_ciphers: HIGH:!ADH:!EXP:!MD5:!RC4:!3DES:!CAMELLIA:@STRENGTH
+  server_ca_path: ''
+  agent_certificate_path: ''
+  agent_key_path: ''
+  authorization_pass_path: "{{ wazuh_dir }}/etc/authd.pass"
+  authorization_pass_path_macos: "/etc/authd.pass"
+  auto_method: 'no'
+  delay_after_enrollment: 20
+  use_source_ip: 'no'
+
+## Authentication Method: invoking agent-auth
+wazuh_agent_authd:
+  registration_address: 127.0.0.1
+  enable: false
+  port: 1515
+  agent_name: null
+  groups: []
+  ssl_agent_ca: null
+  ssl_agent_cert: null
+  ssl_agent_key: null
+  ssl_auto_negotiate: 'no'
+
+## Authentication Method: REST API
+wazuh_agent_api_validate: yes
+
+## Client buffer
+wazuh_agent_client_buffer:
+  disable: 'no'
+  queue_size: '5000'
+  events_per_sec: '500'
+
+## Rootcheck
+wazuh_agent_rootcheck:
+  frequency: 43200
+
+## Wodles
+wazuh_agent_openscap:
+  disable: 'yes'
+  timeout: 1800
+  interval: '1d'
+  scan_on_start: 'yes'
+
+wazuh_agent_cis_cat:
+  disable: 'yes'
+  install_java: 'no'
+  timeout: 1800
+  interval: '1d'
+  scan_on_start: 'yes'
+  java_path: 'wodles/java'
+  ciscat_path: 'wodles/ciscat'
+
+wazuh_agent_osquery:
+  disable: 'yes'
+  run_daemon: 'yes'
+  log_path: '/var/log/osquery/osqueryd.results.log'
+  config_path: '/etc/osquery/osquery.conf'
+  add_labels: 'yes'
+
+wazuh_agent_syscollector:
+  disable: 'no'
+  interval: '1h'
+  scan_on_start: 'yes'
+  hardware: 'yes'
+  os: 'yes'
+  network: 'yes'
+  packages: 'yes'
+  ports_no: 'yes'
+  processes: 'yes'
+
+## SCA
+wazuh_agent_sca:
+  enabled: 'yes'
+  scan_on_start: 'yes'
+  interval: '12h'
+  skip_nfs: 'yes'
+  day: ''
+  wday: ''
+  time: ''
+
+## Syscheck
+wazuh_agent_syscheck:
+  frequency: 43200
+  scan_on_start: 'yes'
+  auto_ignore: 'no'
+  win_audit_interval: 60
+  skip_nfs: 'yes'
+  skip_dev: 'yes'
+  skip_proc: 'yes'
+  skip_sys: 'yes'
+  process_priority: 10
+  max_eps: 100
+  sync_enabled: 'yes'
+  sync_interval: '5m'
+  sync_max_interval: '1h'
+  sync_max_eps: 10
+  ignore:
+    - /etc/mtab
+    - /etc/hosts.deny
+    - /etc/mail/statistics
+    - /etc/random-seed
+    - /etc/random.seed
+    - /etc/adjtime
+    - /etc/httpd/logs
+    - /etc/utmpx
+    - /etc/wtmpx
+    - /etc/cups/certs
+    - /etc/dumpdates
+    - /etc/svc/volatile
+  ignore_linux_type:
+    - '.log$|.swp$'
+  ignore_win:
+    - '.log$|.htm$|.jpg$|.png$|.chm$|.pnf$|.evtx$'
+  no_diff:
+    - /etc/ssl/private.key
+  directories:
+    - dirs: /etc,/usr/bin,/usr/sbin
+      checks: ''
+    - dirs: /bin,/sbin,/boot
+      checks: ''
+
+## Localfile
+wazuh_agent_localfiles:
+  debian:
+    - format: 'syslog'
+      location: '/var/log/auth.log'
+    - format: 'syslog'
+      location: '/var/log/syslog'
+    - format: 'syslog'
+      location: '/var/log/dpkg.log'
+    - format: 'syslog'
+      location: '/var/log/kern.log'
+  linux:
+    - format: 'syslog'
+      location: "{{ wazuh_dir }}/logs/active-responses.log"
+    - format: 'full_command'
+      command: 'last -n 20'
+      frequency: '360'
+    - format: 'command'
+      command: df -P
+      frequency: '360'
+    - format: 'full_command'
+      command: netstat -tulpn | sed 's/\([[:alnum:]]\+\)\ \+[[:digit:]]\+\ \+[[:digit:]]\+\ \+\(.*\):\([[:digit:]]*\)\ \+\([0-9\.\:\*]\+\).\+\ \([[:digit:]]*\/[[:alnum:]\-]*\).*/\1 \2 == \3 == \4 \5/' | sort -k 4 -g | sed 's/ == \(.*\) ==/:\1/' | sed 1,2d
+      alias: 'netstat listening ports'
+      frequency: '360'
+
+## Labels
+wazuh_agent_labels:
+  enable: false
+  list:
+    - key: Env
+      value: Production
+
+## Active response
+wazuh_agent_active_response:
+  ar_disabled: 'no'
+  ca_store: "{{ wazuh_dir }}/etc/wpk_root.pem"
+  ca_store_win: 'wpk_root.pem'
+  ca_store_macos: 'etc/wpk_root.pem'
+  ca_verification: 'yes'
+
+## Logging
+wazuh_agent_log_format: 'plain'
+
+# wazuh_agent_config
+wazuh_agent_config_defaults:
+  repo: '{{ wazuh_repo }}'  # Ensure that wazuh_repo is defined elsewhere
+  active_response: '{{ wazuh_agent_active_response }}'
+  log_format: '{{ wazuh_agent_log_format }}'
+  client_buffer: '{{ wazuh_agent_client_buffer }}'
+  syscheck: '{{ wazuh_agent_syscheck }}'
+  rootcheck: '{{ wazuh_agent_rootcheck }}'
+  openscap: '{{ wazuh_agent_openscap }}'
+  osquery: '{{ wazuh_agent_osquery }}'
+  syscollector: '{{ wazuh_agent_syscollector }}'
+  sca: '{{ wazuh_agent_sca }}'
+  cis_cat: '{{ wazuh_agent_cis_cat }}'
+  localfiles: '{{ wazuh_agent_localfiles }}'
+  labels: '{{ wazuh_agent_labels }}'
+  enrollment: '{{ wazuh_agent_enrollment }}'
