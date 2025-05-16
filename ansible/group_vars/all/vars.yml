@@ -7,7 +7,7 @@ wazuh_custom_packages_installation_agent_deb_url: ""
 
 
 # We recommend the use of ansible-vault to protect Wazuh, api, agentless and authd credentials.
-api_pass: 'eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3YXp1aCIsImF1ZCI6IldhenVoIEFQSSBSRVNUIiwibmJmIjoxNzQ2NzYwODg4LCJleHAiOjE3NDY3NjE3ODgsInN1YiI6IndhenVoLXd1aSIsInJ1bl9hcyI6ZmFsc2UsInJiYWNfcm9sZXMiOlsxXSwicmJhY19tb2RlIjoid2hpdGUifQ.AbJIhZ5m1wkGda1qhxZYZGLBJhz8bXB60nVD1FgSBqsZaJjcDgOt_jNcYiJByX6T2a4pHawaGyUGiMlYqpcc7SWWAOdrIM3bkWq7J0Kr3_G2x-fv9UI1PFx4KPTBCgWb3R2NP9DgrgVOK6GkFJcGDL9U_JExnXuCs089i9qDMjP98KHY'
+api_pass: 'eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3YXp1aCIsImF1ZCI6IldhenVoIEFQSSBSRVNUIiwibmJmIjoxNzQ3Mzg4MjU5LCJleHAiOjE3NDczODkxNTksInN1YiI6IndhenVoLXd1aSIsInJ1bl9hcyI6ZmFsc2UsInJiYWNfcm9sZXMiOlsxXSwicmJhY19tb2RlIjoid2hpdGUifQ.ADg8LtGTZyX50N5Edvw3kNQhRyD-KZ9X4K2L7hRSuVeTbfdihwDrcqkhTE5NDYSnaCQiBAl-qoV56TFAeME6zTzDALK-yi58axZmc2M0r9kg24McWwGMKSNllZSren6rHhdBnZ1cPYM9H0KN19m5V-B-tPen7IjCze0iaLsrGZeX0LHu'
 authd_pass: 'password'
 
 wazuh_api_reachable_from_agent: yes
@@ -188,6 +188,8 @@ wazuh_agent_localfiles:
       command: netstat -tulpn | sed 's/\([[:alnum:]]\+\)\ \+[[:digit:]]\+\ \+[[:digit:]]\+\ \+\(.*\):\([[:digit:]]*\)\ \+\([0-9\.\:\*]\+\).\+\ \([[:digit:]]*\/[[:alnum:]\-]*\).*/\1 \2 == \3 == \4 \5/' | sort -k 4 -g | sed 's/ == \(.*\) ==/:\1/' | sed 1,2d
       alias: 'netstat listening ports'
       frequency: '360'
+    - format: 'json'
+      location: '/var/log/suricata/eve.json'
 
 ## Labels
 wazuh_agent_labels:
